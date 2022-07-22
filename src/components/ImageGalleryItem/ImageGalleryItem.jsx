@@ -10,10 +10,10 @@ const ImageGalleryItem = ({ image: { webformatURL, tags, id }, onClick }) => {
 };
 
 ImageGalleryItem.propTypes = {
-  webformatURL: PropTypes,
+  webformatURL: PropTypes.string,
   tags: PropTypes.array,
   id: PropTypes.number,
-  setModalImgInfo: PropTypes.func.isRequired,
+  onClick: PropTypes.func.isRequired,
 };
 
 export default ImageGalleryItem;
