@@ -18,28 +18,28 @@ export class App extends Component {
     searchQuery: '',
     page: 1,
     per_page: 12,
-    showModal: false,
-    loadMore: false,
-    isLoading: false,
-    isEmpty: false,
-    error: null,
-    largeImageURL: null,
+    loadMore: false, // отображение кнопки LoadMore
+    isLoading: false, // для отображения - спинера
+    isEmpty: false, // пустой ли массив получен при запросе
+    error: null, // ошибка в catch
+    // showModal: false, // отображение модалки
   };
-
-  // || prevState.page !== page
 
   componentDidUpdate(_, prevState) {
     const { searchQuery, page } = this.state;
-    if (prevState.searchQuery !== searchQuery) {
+    if (prevState.searchQuery !== searchQuery || prevState.page !== page) {
       this.getPhotos(searchQuery, page);
     }
   }
 
   getPhotos = async (query, page) => {
     if (!query) return;
+
     this.setState({ isLoading: true });
+
     try {
       const { hits, totalHits } = await imagesAPI(query, page);
+
       if (hits.length === 0) {
         this.setState({ isEmpty: true });
       }
@@ -60,8 +60,8 @@ export class App extends Component {
       searchQuery,
       page: 1,
       images: [],
-      loadMore: false,
       isEmpty: false,
+      loadMore: false,
     });
   };
 
@@ -70,7 +70,10 @@ export class App extends Component {
   };
 
   openModal = evt => {
-    this.setState({ showModal: true, id: evt.currentTarget.dataset.id });
+    this.setState({
+      showModal: true,
+      id: evt.currentTarget.dataset.id,
+    });
   };
 
   closeModal = evt => {
@@ -95,10 +98,6 @@ export class App extends Component {
       <AppContainer>
         <Searchbar onSubmit={this.handleFormSubmit} />
 
-        {isLoading && <Loader />}
-
-        {isEmpty && <ImageError message={`Not found this query `} />}
-
         {searchQuery ? (
           <ImageGallery onClick={this.openModal} images={images} />
         ) : (
@@ -108,8 +107,12 @@ export class App extends Component {
         {loadMore && <Button onClick={this.loadMore} page={page} />}
 
         {showModal && (
-          <Modal images={images} id={Number(id)} onClose={this.closeModal} />
+          <Modal onClose={this.closeModal} images={images} id={Number(id)} />
         )}
+
+        {isLoading && <Loader />}
+
+        {isEmpty && <ImageError message={`Not found this query `} />}
 
         <ToastContainer position="top-center" autoClose={3000} rtl />
       </AppContainer>

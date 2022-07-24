@@ -3,30 +3,26 @@ import { ImageGalleryList } from './ImageGallery.styled';
 import ImageGalleryItem from 'components/ImageGalleryItem';
 
 const ImageGallery = ({ images, onClick }) => {
-  <ImageGalleryList>
-    {images &&
-      images.map(({ webformatURL, largeImageURL, tags, id }) => {
-        return (
-          <ImageGalleryItem
-            key={id}
-            webformatURL={webformatURL}
-            largeImageURL={largeImageURL}
-            tags={tags}
-            onClick={onClick}
-          />
-        );
-      })}
-  </ImageGalleryList>;
+  return (
+    <ImageGalleryList>
+      {images &&
+        images.map(({ id, webformatURL, tags }) => {
+          return (
+            <ImageGalleryItem
+              key={id}
+              id={id}
+              webformatURL={webformatURL}
+              tags={tags}
+              onClick={onClick}
+            />
+          );
+        })}
+    </ImageGalleryList>
+  );
 };
 
 ImageGallery.propTypes = {
-  images: PropTypes.arrayOf(
-    PropTypes.shape({
-      webformatURL: PropTypes.string.isRequired,
-      largeImageURL: PropTypes.string.isRequired,
-      tags: PropTypes.string.isRequired,
-    })
-  ).isRequired,
+  images: PropTypes.array,
   onClick: PropTypes.func.isRequired,
 };
 

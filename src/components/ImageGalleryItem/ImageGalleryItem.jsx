@@ -1,24 +1,18 @@
 import { GalleryItem, GalleryImage } from './ImageGalleryItem.styled';
 import { PropTypes } from 'prop-types';
 
-const ImageGalleryItem = ({
-  webformatURL,
-  largeImageURL,
-  tags,
-  onClick,
-  id,
-}) => {
+const ImageGalleryItem = ({ id, webformatURL, tags, onClick }) => {
   return (
-    <GalleryItem onClick={onClick}>
+    <GalleryItem onClick={onClick} data-id={id}>
       <GalleryImage src={webformatURL} alt={tags} />
     </GalleryItem>
   );
 };
 
 ImageGalleryItem.propTypes = {
+  id: PropTypes.number,
   webformatURL: PropTypes.string.isRequired,
   tags: PropTypes.string.isRequired,
-  // id: PropTypes.number.isRequired,
   onClick: PropTypes.func.isRequired,
 };
 

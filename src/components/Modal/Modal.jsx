@@ -1,27 +1,21 @@
 import { Overlay, ModalContainer } from './Modal.styled';
+import { createPortal } from 'react-dom';
 import { Component } from 'react';
 import { PropTypes } from 'prop-types';
-import { createPortal } from 'react-dom';
 
 const modalRoot = document.querySelector('#modal-root');
 
 class Modal extends Component {
   componentDidMount() {
-    window.addEventListener('keydown', this.handleEscButtonPress);
+    window.addEventListener('keydown', this.handleEscPress);
   }
 
   componentWillUnmount() {
-    window.removeEventListener('keydown', this.handleEscButtonPress);
+    window.removeEventListener('keydown', this.handleEscPress);
   }
 
-  handleEscButtonPress = evt => {
+  handleEscPress = evt => {
     if (evt.code === 'Escape') {
-      this.props.onClose();
-    }
-  };
-
-  handleBackdropClick = event => {
-    if (event.currentTarget === event.target) {
       this.props.onClose();
     }
   };
@@ -29,7 +23,13 @@ class Modal extends Component {
   findImage = () => {
     const { images, id } = this.props;
     if (id) {
-      return images.find(image => image.id === id);
+      return images.find(img => img.id === id);
+    }
+  };
+
+  handleBackdropClick = evt => {
+    if (evt.currentTarget === evt.target) {
+      this.props.onClose();
     }
   };
 
@@ -50,7 +50,7 @@ class Modal extends Component {
 Modal.propTypes = {
   images: PropTypes.array,
   id: PropTypes.number,
-  onclose: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
 };
 
 export default Modal;
