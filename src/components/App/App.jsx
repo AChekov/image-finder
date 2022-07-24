@@ -6,8 +6,9 @@ import { Notification } from '../ImageGallery/ImageGallery.styled';
 import Searchbar from 'components/Searchbar';
 import ImageGallery from 'components/ImageGallery';
 import Button from 'components/Button';
-import LoaderCont from 'components/Loader';
+import Loader from 'components/Loader';
 import Modal from 'components/Modal';
+import ImageError from 'components/ImageError';
 import imagesAPI from '../../services/apiService';
 
 export class App extends Component {
@@ -22,11 +23,14 @@ export class App extends Component {
     isLoading: false,
     isEmpty: false,
     error: null,
+    largeImageURL: null,
   };
+
+  // || prevState.page !== page
 
   componentDidUpdate(_, prevState) {
     const { searchQuery, page } = this.state;
-    if (prevState.searchQuery !== searchQuery || prevState.page !== page) {
+    if (prevState.searchQuery !== searchQuery) {
       this.getPhotos(searchQuery, page);
     }
   }
@@ -36,7 +40,6 @@ export class App extends Component {
     this.setState({ isLoading: true });
     try {
       const { hits, totalHits } = await imagesAPI(query, page);
-      console.log(hits, totalHits);
       if (hits.length === 0) {
         this.setState({ isEmpty: true });
       }
@@ -92,14 +95,12 @@ export class App extends Component {
       <AppContainer>
         <Searchbar onSubmit={this.handleFormSubmit} />
 
-        <ToastContainer position="top-center" autoClose={3000} rtl />
+        {isLoading && <Loader />}
 
-        {isLoading && <LoaderCont />}
-
-        {isEmpty && <div>message={`not found this query `}</div>}
+        {isEmpty && <ImageError message={`Not found this query `} />}
 
         {searchQuery ? (
-          <ImageGallery openModal={this.openModal} images={images} />
+          <ImageGallery onClick={this.openModal} images={images} />
         ) : (
           <Notification>Please enter a search term</Notification>
         )}
@@ -109,6 +110,8 @@ export class App extends Component {
         {showModal && (
           <Modal images={images} id={Number(id)} onClose={this.closeModal} />
         )}
+
+        <ToastContainer position="top-center" autoClose={3000} rtl />
       </AppContainer>
     );
   }

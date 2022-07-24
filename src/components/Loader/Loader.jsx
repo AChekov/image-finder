@@ -1,12 +1,14 @@
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import { Grid } from 'react-loader-spinner';
-import { Loader } from './Loader.styled';
+import { LoaderContainer } from './Loader.styled';
 
-export default function LoaderCont() {
+const Loader = () => {
   return (
-    <Loader role="alert">
+    <LoaderContainer role="alert">
       <Grid color="#00BFFF" height={80} width={80} />
       Loading
-    </Loader>
+    </LoaderContainer>
   );
-}
+};
+
+export default Loader;

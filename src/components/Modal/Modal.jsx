@@ -1,11 +1,11 @@
-import { Overlay, Modal } from './Modal.styled';
+import { Overlay, ModalContainer } from './Modal.styled';
 import { Component } from 'react';
 import { PropTypes } from 'prop-types';
 import { createPortal } from 'react-dom';
 
 const modalRoot = document.querySelector('#modal-root');
 
-class ModalCont extends Component {
+class Modal extends Component {
   componentDidMount() {
     window.addEventListener('keydown', this.handleEscButtonPress);
   }
@@ -38,19 +38,19 @@ class ModalCont extends Component {
 
     return createPortal(
       <Overlay onClick={this.handleBackdropClick}>
-        <Modal>
+        <ModalContainer>
           <img src={findImage.largeImageURL} alt={findImage.tags} />
-        </Modal>
+        </ModalContainer>
       </Overlay>,
       modalRoot
     );
   }
 }
 
-ModalCont.propTypes = {
+Modal.propTypes = {
   images: PropTypes.array,
   id: PropTypes.number,
   onclose: PropTypes.func.isRequired,
 };
 
-export default ModalCont;
+export default Modal;

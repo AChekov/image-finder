@@ -40,7 +40,7 @@ class SearchbarForm extends Component {
           name="searchQuery"
           type="text"
           autocomplete="off"
-          autofocus
+          // autofocus
           placeholder="Search images and photos"
           value={this.state.searchQuery}
           onChange={this.handleValueChange}

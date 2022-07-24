@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const Loader = styled.div`
+export const LoaderContainer = styled.div`
   margin-left: auto;
   margin-right: auto;
 `;
