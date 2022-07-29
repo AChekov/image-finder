@@ -25,7 +25,7 @@ export default function SearchbarForm({ onSubmit }) {
     }
 
     onSubmit(searchQuery);
-    setSearchQuery({ searchQuery: '' });
+    setSearchQuery('');
   };
 
   return (
