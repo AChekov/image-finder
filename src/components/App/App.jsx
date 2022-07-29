@@ -17,7 +17,7 @@ export class App extends Component {
     id: null,
     searchQuery: '',
     page: 1,
-    per_page: 12,
+    per_page: 15,
     loadMore: false, // отображение кнопки LoadMore
     isLoading: false, // для отображения - спинера
     isEmpty: false, // пустой ли массив получен при запросе
@@ -48,6 +48,10 @@ export class App extends Component {
         images: [...prevState.images, ...hits],
         loadMore: this.state.page < Math.ceil(totalHits / this.state.per_page),
       }));
+
+      if (page > 1) {
+        this.pageScroll();
+      }
     } catch (error) {
       this.setState({ error: error.message });
     } finally {
@@ -79,6 +83,13 @@ export class App extends Component {
   closeModal = evt => {
     this.setState({
       showModal: false,
+    });
+  };
+
+  pageScroll = () => {
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: 'smooth',
     });
   };
 

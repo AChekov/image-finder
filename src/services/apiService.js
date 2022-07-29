@@ -6,7 +6,7 @@ axios.defaults.params = {
   key: API_KEY,
   orientation: 'horizontal',
   image_type: 'photo',
-  per_page: 12,
+  per_page: 15,
 };
 
 export const fetchImages = async (query, page) => {
