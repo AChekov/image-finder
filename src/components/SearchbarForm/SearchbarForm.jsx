@@ -1,6 +1,7 @@
 // import { Component } from 'react';
 import { useState } from 'react';
 import { PropTypes } from 'prop-types';
+import { FcSearch } from 'react-icons/fc';
 import { toast } from 'react-toastify';
 import {
   SearchForm,
@@ -31,6 +32,7 @@ export default function SearchbarForm({ onSubmit }) {
   return (
     <SearchForm onSubmit={handleSubmit}>
       <SearchBtn type="submit">
+        <FcSearch size="30" />
         <SearchLabel>Search</SearchLabel>
       </SearchBtn>
 
