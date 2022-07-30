@@ -26,6 +26,7 @@ export const App = () => {
 
   useEffect(() => {
     getPhotos(searchQuery, page);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery, page]);
 
   const getPhotos = async (query, page) => {
@@ -42,8 +43,8 @@ export const App = () => {
         setIsEmpty(true);
         setSearchQuery('');
       }
-      setError(null);
 
+      setError(null);
       setImages(prevImage => [...prevImage, ...hits]);
       setLoadMore(page < Math.ceil(totalHits / perPage));
 
