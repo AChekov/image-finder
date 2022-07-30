@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+// import { Component } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { AppContainer } from './App.styled';
@@ -12,23 +13,25 @@ import ImageError from 'components/ImageError';
 import imagesAPI from '../../services/apiService';
 
 export const App = () => {
-  const [images, setImages] = useState([]);
-  const [id, setId] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [images, setImages] = useState([]);
   const [page, setPage] = useState(1);
+  const [id, setId] = useState(null);
   const [loadMore, setLoadMore] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isEmpty, setIsEmpty] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [error, setError] = useState(null);
-  const perPage = 15;
+  const perPage = 12;
 
   useEffect(() => {
     getPhotos(searchQuery, page);
   }, [searchQuery, page]);
 
   const getPhotos = async (query, page) => {
-    if (!query) return;
+    if (!query) {
+      return;
+    }
 
     setIsLoading(true);
 
@@ -36,17 +39,19 @@ export const App = () => {
       const { hits, totalHits } = await imagesAPI(query, page);
 
       if (hits.length === 0) {
-        isEmpty(true);
+        setIsEmpty(true);
+        setSearchQuery('');
       }
+      setError(null);
 
-      setImages(prevImage => [...images, ...hits]);
+      setImages(prevImage => [...prevImage, ...hits]);
       setLoadMore(page < Math.ceil(totalHits / perPage));
 
       if (page > 1) {
         pageScroll();
       }
     } catch (error) {
-      setError({ error });
+      setError(error.message);
     } finally {
       setIsLoading(false);
     }
@@ -65,7 +70,11 @@ export const App = () => {
     setId(evt.currentTarget.dataset.id);
   };
 
-  const closeModal = evt => {
+  const onLoadMoreBtnClick = () => {
+    setPage(prevState => prevState + 1);
+  };
+
+  const closeModal = () => {
     setShowModal(false);
   };
 
@@ -86,9 +95,7 @@ export const App = () => {
         <Notification>Please enter a search term</Notification>
       )}
 
-      {loadMore && (
-        <Button onClick={() => setPage(page => page + 1)} page={page} />
-      )}
+      {loadMore && <Button onClick={onLoadMoreBtnClick} page={page} />}
 
       {showModal && (
         <Modal onClose={closeModal} images={images} id={Number(id)} />
@@ -96,12 +103,16 @@ export const App = () => {
 
       {isLoading && <Loader />}
 
-      {isEmpty && <ImageError message={`Not found this query `} />}
+      {isEmpty && <ImageError message={`❌Not found this query `} />}
+
+      {error && <ImageError message={`❌Server response error `} />}
 
       <ToastContainer position="top-center" autoClose={3000} rtl />
     </AppContainer>
   );
 };
+
+// ================ CLASS ================
 
 // export class App extends Component {
 //   state = {

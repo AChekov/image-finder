@@ -1,51 +1,93 @@
 import { Overlay, ModalContainer } from './Modal.styled';
 import { createPortal } from 'react-dom';
-import { Component } from 'react';
+// import { Component } from 'react';
 import { PropTypes } from 'prop-types';
+import { useEffect } from 'react';
 
 const modalRoot = document.querySelector('#modal-root');
 
-class Modal extends Component {
-  componentDidMount() {
-    window.addEventListener('keydown', this.handleEscPress);
-  }
+const Modal = ({ onClose, images, id }) => {
+  useEffect(() => {
+    window.addEventListener('keydown', handleEscPress);
 
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.handleEscPress);
-  }
+    return () => {
+      window.removeEventListener('keydown', handleEscPress);
+    };
+  });
 
-  handleEscPress = evt => {
+  const handleEscPress = evt => {
     if (evt.code === 'Escape') {
-      this.props.onClose();
+      onClose();
     }
   };
 
-  findImage = () => {
-    const { images, id } = this.props;
+  const findImage = () => {
     if (id) {
       return images.find(img => img.id === id);
     }
   };
 
-  handleBackdropClick = evt => {
+  const handleBackdropClick = evt => {
     if (evt.currentTarget === evt.target) {
-      this.props.onClose();
+      onClose();
     }
   };
 
-  render() {
-    const findImage = this.findImage();
+  const img = findImage();
+  // console.log(img);
+  return createPortal(
+    <Overlay onClick={handleBackdropClick}>
+      <ModalContainer>
+        <img src={img.largeImageURL} alt={img.tags} />
+      </ModalContainer>
+    </Overlay>,
+    modalRoot
+  );
+};
 
-    return createPortal(
-      <Overlay onClick={this.handleBackdropClick}>
-        <ModalContainer>
-          <img src={findImage.largeImageURL} alt={findImage.tags} />
-        </ModalContainer>
-      </Overlay>,
-      modalRoot
-    );
-  }
-}
+// ================ CLASS ================
+
+// class Modal extends Component {
+//   componentDidMount() {
+//     window.addEventListener('keydown', this.handleEscPress);
+//   }
+
+//   componentWillUnmount() {
+//     window.removeEventListener('keydown', this.handleEscPress);
+//   }
+
+//   handleEscPress = evt => {
+//     if (evt.code === 'Escape') {
+//       this.props.onClose();
+//     }
+//   };
+
+//   findImage = () => {
+//     const { images, id } = this.props;
+//     if (id) {
+//       return images.find(img => img.id === id);
+//     }
+//   };
+
+//   handleBackdropClick = evt => {
+//     if (evt.currentTarget === evt.target) {
+//       this.props.onClose();
+//     }
+//   };
+
+//   render() {
+//     const findImage = this.findImage();
+
+//     return createPortal(
+//       <Overlay onClick={this.handleBackdropClick}>
+//         <ModalContainer>
+//           <img src={findImage.largeImageURL} alt={findImage.tags} />
+//         </ModalContainer>
+//       </Overlay>,
+//       modalRoot
+//     );
+//   }
+// }
 
 Modal.propTypes = {
   images: PropTypes.array,
